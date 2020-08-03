@@ -1,4 +1,4 @@
-const { say } = require('../pkg/ssvm_nodejs_starter_lib.js');
+const { say, get_random } = require('../pkg/ssvm_nodejs_starter_lib.js');
 
 const http = require('http');
 const url = require('url');
@@ -7,10 +7,15 @@ const port = 3000;
 
 const server = http.createServer((req, res) => {
   const queryObject = url.parse(req.url,true).query;
+  const example = `Please use command curl http://${hostname}:${port}/?name=MyName or\nPlease use command curl http://${hostname}:${port}/?name=random \n`
   if (!queryObject['name']) {
-    res.end(`Please use command curl http://${hostname}:${port}/?name=MyName \n`);
+    res.end(example);
   } else {
-    res.end(say(queryObject['name']) + '\n');
+    if (queryObject['name'] != 'random'){
+      res.end(say(queryObject['name']) + '\n');
+    } else {
+      res.end(get_random());
+    }
   }
 });
 
